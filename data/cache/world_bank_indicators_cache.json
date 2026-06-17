@@ -1,0 +1,173 @@
+{
+  "retrieved_at": "2026-06-17T00:02:16.612514+00:00",
+  "rows": [
+    {
+      "country_code": "PRT",
+      "year": 2024,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.5,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2023,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.498,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2022,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.138,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2021,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.712,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2020,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.85,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2019,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.422,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2018,
+      "indicator_code": "SL.UEM.TOTL.ZS",
+      "indicator_name": "unemployment_total_pct",
+      "value": 6.966,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2024,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 2.41613187791884,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2023,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 4.31128191898672,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2022,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 7.83269124233323,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2021,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 1.26565719069044,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2020,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": -0.0124383299575305,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2019,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 0.338178410046034,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2018,
+      "indicator_code": "FP.CPI.TOTL.ZG",
+      "indicator_name": "inflation_consumer_prices_pct",
+      "value": 0.993715683468326,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2024,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 2.13967177177636,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2023,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 3.09997909018263,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2022,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 6.98584137580278,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2021,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 5.55875672070374,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2020,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": -8.20463159324387,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2019,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 2.74568432648596,
+      "source_type": "world_bank_api"
+    },
+    {
+      "country_code": "PRT",
+      "year": 2018,
+      "indicator_code": "NY.GDP.MKTP.KD.ZG",
+      "indicator_name": "gdp_growth_pct",
+      "value": 2.94628343449202,
+      "source_type": "world_bank_api"
+    }
+  ]
+}

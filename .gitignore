@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Entorno
+.env
+
+# Datos generados
+logs/*.log
+data/processed/*.csv
+data/processed/*.json
+data/database/*.db
+
+# SO / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Evidencias locales de ejecución
+htmlcov/
+.coverage
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Variables de entorno
+.env
+
+# Sistema operativo
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# Bases locales generadas
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos procesados regenerables
+data/processed/
+data/database/
+
+# Streamlit
+.streamlit/secrets.toml
+

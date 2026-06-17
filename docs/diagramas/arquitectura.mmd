@@ -1,0 +1,18 @@
+flowchart LR
+    CSV[bank.csv
+Fuente 1: CSV] --> ETL[Pipeline ETL Python]
+    APIEXT[World Bank Indicators API
+Fuente 2: REST JSON] --> ETL
+    SQLREF[(contact_channel_reference
+Fuente 3: SQL local)] --> ETL
+    ETL --> VALID[Validación de esquema
+Manejo de errores
+Logging]
+    VALID --> ML[PCA + K-Means
+Segmentación exploratoria]
+    ML --> DB[(SQLite local)]
+    DB --> API[FastAPI propia]
+    API --> DASH[Streamlit + Plotly]
+    DASH --> EXE[Vista ejecutiva]
+    DASH --> OPE[Vista operativa]
+    DASH --> TEC[Vista técnica]

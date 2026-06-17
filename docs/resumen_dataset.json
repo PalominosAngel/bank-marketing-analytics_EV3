@@ -1,0 +1,32 @@
+{
+  "rows": 4521,
+  "columns": 17,
+  "column_names": [
+    "age",
+    "job",
+    "marital",
+    "education",
+    "default",
+    "balance",
+    "housing",
+    "loan",
+    "contact",
+    "day",
+    "month",
+    "duration",
+    "campaign",
+    "pdays",
+    "previous",
+    "poutcome",
+    "y"
+  ],
+  "conversion_yes": 521,
+  "conversion_no": 4000,
+  "conversion_rate_pct": 11.52,
+  "unknown_categories": {
+    "job": 38,
+    "education": 187,
+    "contact": 1324,
+    "poutcome": 3705
+  }
+}
