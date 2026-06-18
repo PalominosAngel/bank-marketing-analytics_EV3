@@ -49,8 +49,9 @@ bank.csv + World Bank REST API + catálogo SQL de canales
 * Python 3.12 recomendado.
 * Conexión a internet para actualizar indicadores desde la API externa.
 * Navegador web para visualizar FastAPI y Streamlit.
-* Terminal de macOS.
-* Homebrew recomendado para instalar Python 3.12 en computadores nuevos.
+* Terminal de macOS, PowerShell o CMD en Windows.
+* Homebrew recomendado en macOS para instalar Python 3.12 si no está disponible.
+* En Windows se recomienda instalar Python 3.12 desde el sitio oficial de Python y marcar la opción **Add Python to PATH** durante la instalación.
 
 ---
 
@@ -58,15 +59,30 @@ bank.csv + World Bank REST API + catálogo SQL de canales
 
 Esta sección explica cómo ejecutar el proyecto en un computador nuevo.
 
+> **Importante:** en los comandos donde aparezca `RUTA_DEL_PROYECTO`, se debe reemplazar por la ubicación real donde se descomprimió o clonó el proyecto.
+> Por ejemplo, puede estar en `Downloads`, `Desktop`, `Documentos` o cualquier otra carpeta.
+
 ---
 
-## 1. Entrar a la carpeta del proyecto
+# 1. Entrar a la carpeta del proyecto
 
-Abrir la terminal y entrar a la carpeta del proyecto:
+## macOS
+
+Abrir la terminal y entrar a la carpeta donde está el proyecto.
+
+Ejemplo si está en Descargas:
 
 ```bash
 cd ~/Downloads/bank-marketing-analytics
 ```
+
+Ejemplo si está en Escritorio:
+
+```bash
+cd ~/Desktop/bank-marketing-analytics
+```
+
+También se puede escribir `cd`, dejar un espacio, arrastrar la carpeta del proyecto a la terminal y presionar Enter.
 
 Verificar que se está dentro de la carpeta correcta:
 
@@ -87,9 +103,46 @@ README.md
 tests
 ```
 
+## Windows
+
+Abrir **PowerShell** o **CMD** y entrar a la carpeta donde está el proyecto.
+
+Ejemplo si está en Descargas:
+
+```powershell
+cd "$env:USERPROFILE\Downloads\bank-marketing-analytics"
+```
+
+Ejemplo si está en Escritorio:
+
+```powershell
+cd "$env:USERPROFILE\Desktop\bank-marketing-analytics"
+```
+
+Verificar que se está dentro de la carpeta correcta:
+
+```powershell
+dir
+```
+
+Deberían aparecer carpetas y archivos como:
+
+```text
+api
+dashboards
+data
+docs
+etl
+requirements.txt
+README.md
+tests
+```
+
 ---
 
-## 2. Verificar versión de Python
+# 2. Verificar versión de Python
+
+## macOS
 
 Ejecutar:
 
@@ -117,11 +170,39 @@ Si aparece:
 Python 3.12.x
 ```
 
-se puede continuar al paso 4.
+se puede continuar con la creación del entorno virtual.
+
+## Windows
+
+Ejecutar:
+
+```powershell
+python --version
+```
+
+o:
+
+```powershell
+py --version
+```
+
+Resultado esperado:
+
+```text
+Python 3.12.x
+```
+
+Si Python no está instalado o aparece una versión antigua, instalar Python 3.12 desde el sitio oficial de Python. Durante la instalación, marcar la opción:
+
+```text
+Add Python to PATH
+```
+
+Luego cerrar y volver a abrir PowerShell.
 
 ---
 
-## 3. Instalar Homebrew y Python 3.12
+# 3. Instalar Python 3.12 en macOS si es necesario
 
 Si el comando `brew` no existe:
 
@@ -144,12 +225,12 @@ instalar Homebrew con:
 Al finalizar, Homebrew mostrará instrucciones similares a estas:
 
 ```bash
-echo >> /Users/alumno14/.zprofile
-echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> /Users/alumno14/.zprofile
+echo >> /Users/USUARIO/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> /Users/USUARIO/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 ```
 
-Ejecutar esos comandos para agregar Homebrew al PATH.
+Ejecutar los comandos que indique Homebrew para agregarlo al PATH.
 
 Luego verificar:
 
@@ -177,12 +258,20 @@ Python 3.12.x
 
 ---
 
-## 4. Crear entorno virtual
+# 4. Crear entorno virtual
+
+## macOS
 
 Dentro de la carpeta raíz del proyecto, ejecutar:
 
 ```bash
 python3.12 -m venv .venv
+```
+
+Si `python3.12` no existe pero `python3` ya corresponde a Python 3.12, usar:
+
+```bash
+python3 -m venv .venv
 ```
 
 Activar el entorno virtual:
@@ -191,7 +280,7 @@ Activar el entorno virtual:
 source .venv/bin/activate
 ```
 
-Verificar que el entorno está usando Python 3.12:
+Verificar versión:
 
 ```bash
 python --version
@@ -203,25 +292,97 @@ Resultado esperado:
 Python 3.12.x
 ```
 
+## Windows PowerShell
+
+Dentro de la carpeta raíz del proyecto, ejecutar:
+
+```powershell
+python -m venv .venv
+```
+
+o:
+
+```powershell
+py -3.12 -m venv .venv
+```
+
+Activar el entorno virtual:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Si PowerShell bloquea la activación del entorno virtual, ejecutar:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Luego volver a activar:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Verificar versión:
+
+```powershell
+python --version
+```
+
+Resultado esperado:
+
+```text
+Python 3.12.x
+```
+
+## Windows CMD
+
+Dentro de la carpeta raíz del proyecto:
+
+```cmd
+python -m venv .venv
+```
+
+Activar el entorno virtual:
+
+```cmd
+.venv\Scripts\activate
+```
+
+Verificar versión:
+
+```cmd
+python --version
+```
+
 ---
 
-## 5. Instalar dependencias
+# 5. Instalar dependencias
+
+## macOS
 
 Con el entorno virtual activado:
 
 ```bash
 python -m pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
-Luego instalar las librerías del proyecto:
+## Windows
 
-```bash
+Con el entorno virtual activado:
+
+```powershell
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 ---
 
-## 6. Crear archivo de configuración
+# 6. Crear archivo de configuración
+
+## macOS
 
 Crear el archivo `.env` desde el ejemplo incluido:
 
@@ -229,11 +390,25 @@ Crear el archivo `.env` desde el ejemplo incluido:
 cp .env.example .env
 ```
 
+## Windows PowerShell
+
+```powershell
+Copy-Item .env.example .env
+```
+
+## Windows CMD
+
+```cmd
+copy .env.example .env
+```
+
 Este archivo permite ejecutar el proyecto de forma local usando SQLite.
 
 ---
 
-## 7. Ejecutar el pipeline ETL
+# 7. Ejecutar el pipeline ETL
+
+## macOS y Windows
 
 Ejecutar:
 
@@ -264,21 +439,37 @@ significa que la API externa no respondió y el sistema usó el respaldo local. 
 
 Abrir una nueva terminal.
 
-Entrar nuevamente al proyecto:
+Entrar nuevamente a la carpeta real del proyecto y activar el entorno virtual.
+
+## macOS
+
+```bash
+cd RUTA_DEL_PROYECTO
+source .venv/bin/activate
+uvicorn api.main:app --reload
+```
+
+Ejemplo:
 
 ```bash
 cd ~/Downloads/bank-marketing-analytics
-```
-
-Activar el entorno virtual:
-
-```bash
 source .venv/bin/activate
+uvicorn api.main:app --reload
 ```
 
-Levantar FastAPI:
+## Windows PowerShell
 
-```bash
+```powershell
+cd RUTA_DEL_PROYECTO
+.\.venv\Scripts\Activate.ps1
+uvicorn api.main:app --reload
+```
+
+Ejemplo:
+
+```powershell
+cd "$env:USERPROFILE\Downloads\bank-marketing-analytics"
+.\.venv\Scripts\Activate.ps1
 uvicorn api.main:app --reload
 ```
 
@@ -303,22 +494,49 @@ Abrir en el navegador:
 
 Abrir otra terminal distinta.
 
-Entrar al proyecto:
+Entrar nuevamente a la carpeta real del proyecto y activar el entorno virtual.
+
+## macOS
+
+```bash
+cd RUTA_DEL_PROYECTO
+source .venv/bin/activate
+PYTHONPATH=. streamlit run dashboards/app.py
+```
+
+Ejemplo:
 
 ```bash
 cd ~/Downloads/bank-marketing-analytics
-```
-
-Activar el entorno virtual:
-
-```bash
 source .venv/bin/activate
+PYTHONPATH=. streamlit run dashboards/app.py
 ```
 
-Ejecutar Streamlit agregando el proyecto al `PYTHONPATH`:
+## Windows PowerShell
 
-```bash
-PYTHONPATH=. streamlit run dashboards/app.py
+```powershell
+cd RUTA_DEL_PROYECTO
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONPATH="."
+streamlit run dashboards/app.py
+```
+
+Ejemplo:
+
+```powershell
+cd "$env:USERPROFILE\Downloads\bank-marketing-analytics"
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONPATH="."
+streamlit run dashboards/app.py
+```
+
+## Windows CMD
+
+```cmd
+cd RUTA_DEL_PROYECTO
+.venv\Scripts\activate
+set PYTHONPATH=.
+streamlit run dashboards/app.py
 ```
 
 Abrir en el navegador:
@@ -335,9 +553,19 @@ Para demostrar el proyecto completo se deben mantener abiertas dos terminales al
 
 ## Terminal 1: API
 
+### macOS
+
 ```bash
-cd ~/Downloads/bank-marketing-analytics
+cd RUTA_DEL_PROYECTO
 source .venv/bin/activate
+uvicorn api.main:app --reload
+```
+
+### Windows PowerShell
+
+```powershell
+cd RUTA_DEL_PROYECTO
+.\.venv\Scripts\Activate.ps1
 uvicorn api.main:app --reload
 ```
 
@@ -349,10 +577,21 @@ http://localhost:8000/docs
 
 ## Terminal 2: Dashboard
 
+### macOS
+
 ```bash
-cd ~/Downloads/bank-marketing-analytics
+cd RUTA_DEL_PROYECTO
 source .venv/bin/activate
 PYTHONPATH=. streamlit run dashboards/app.py
+```
+
+### Windows PowerShell
+
+```powershell
+cd RUTA_DEL_PROYECTO
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONPATH="."
+streamlit run dashboards/app.py
 ```
 
 Se visualiza en:
@@ -379,8 +618,16 @@ Resultado esperado:
 
 También se puede ejecutar:
 
+## macOS
+
 ```bash
 bash scripts/run_tests.sh
+```
+
+## Windows
+
+```powershell
+pytest
 ```
 
 ---
@@ -441,7 +688,7 @@ http://localhost:8501
 9 passed
 ```
 
-Estas evidencias pueden incluirse en la documentación o utilizarse durante la presentación.
+Estas evidencias pueden utilizarse durante la presentación.
 
 ---
 
@@ -449,17 +696,24 @@ Estas evidencias pueden incluirse en la documentación o utilizarse durante la p
 
 ## Error: `python3.12: command not found`
 
-Python 3.12 no está instalado. Instalarlo con Homebrew:
+Python 3.12 no está instalado.
+
+### macOS
 
 ```bash
 brew install python@3.12
-```
-
-Luego verificar:
-
-```bash
 python3.12 --version
 ```
+
+### Windows
+
+Instalar Python 3.12 desde el sitio oficial de Python y marcar:
+
+```text
+Add Python to PATH
+```
+
+Luego cerrar y abrir nuevamente PowerShell.
 
 ---
 
@@ -475,12 +729,46 @@ Luego ejecutar los comandos indicados por Homebrew en la sección `Next steps`.
 
 ---
 
+## Error en Windows: `running scripts is disabled on this system`
+
+PowerShell bloqueó la activación del entorno virtual.
+
+Ejecutar:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Luego activar nuevamente:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+---
+
 ## Error: `ModuleNotFoundError: No module named 'dashboards'`
 
-Ejecutar Streamlit con `PYTHONPATH`:
+Ejecutar Streamlit agregando el proyecto al `PYTHONPATH`.
+
+### macOS
 
 ```bash
 PYTHONPATH=. streamlit run dashboards/app.py
+```
+
+### Windows PowerShell
+
+```powershell
+$env:PYTHONPATH="."
+streamlit run dashboards/app.py
+```
+
+### Windows CMD
+
+```cmd
+set PYTHONPATH=.
+streamlit run dashboards/app.py
 ```
 
 ---
@@ -497,8 +785,17 @@ uvicorn api.main:app --reload
 
 Después levantar Streamlit:
 
+### macOS
+
 ```bash
 PYTHONPATH=. streamlit run dashboards/app.py
+```
+
+### Windows PowerShell
+
+```powershell
+$env:PYTHONPATH="."
+streamlit run dashboards/app.py
 ```
 
 ---
