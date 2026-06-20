@@ -1,0 +1,70 @@
+# Orquestacion del proyecto Bank Marketing Analytics.
+#
+# Servicios:
+#   etl       -> ejecuta el pipeline una vez y genera la base SQLite (job efimero)
+#   api       -> expone los resultados via FastAPI (arranca cuando el ETL termino)
+#   dashboard -> visualiza los datos via Streamlit (arranca cuando la API esta sana)
+#
+# Configuracion externa: las variables se pueden sobrescribir desde un archivo .env
+# en la raiz (Compose lo lee automaticamente). Ver docs/despliegue_docker.md.
+
+# Bloque comun reutilizado por los tres servicios (misma imagen, una sola build).
+# El build se define UNA sola vez en el servicio etl para evitar que los tres
+# servicios exporten la misma imagen en paralelo. api y dashboard la reutilizan.
+x-app: &app
+  image: bank-marketing-analytics:latest
+  environment:
+    APP_ENV: ${APP_ENV:-production}
+    LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    DATABASE_URL: ${DATABASE_URL:-sqlite:///data/database/bank_analytics.db}
+  volumes:
+    - app-data:/app/data/database
+  restart: "no"
+
+services:
+  etl:
+    <<: *app
+    container_name: bma-etl
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: ["python", "-m", "etl.pipeline"]
+
+  api:
+    <<: *app
+    container_name: bma-api
+    pull_policy: never
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      etl:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  dashboard:
+    <<: *app
+    container_name: bma-dashboard
+    pull_policy: never
+    command: ["streamlit", "run", "dashboards/app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///data/database/bank_analytics.db}
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+    ports:
+      - "${DASHBOARD_PORT:-8501}:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  app-data:
+    driver: local

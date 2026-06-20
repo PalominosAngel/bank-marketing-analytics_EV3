@@ -1,0 +1,30 @@
+# Control de version y entornos locales
+.git
+.gitignore
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Configuracion sensible y local
+.env
+.env.*
+!.env.example
+
+# Artefactos de desarrollo
+.atl
+.pytest_cache
+.mypy_cache
+htmlcov
+*.log
+logs
+
+# Base de datos generada localmente (se regenera dentro del contenedor)
+data/database
+
+# Documentacion y notebooks no necesarios en runtime
+docs
+*.ipynb
+etl/notebooks
