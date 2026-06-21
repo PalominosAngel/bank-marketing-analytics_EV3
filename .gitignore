@@ -61,3 +61,6 @@ data/database/
 # Streamlit
 .streamlit/secrets.toml
 
+# Herramientas locales (no forman parte del proyecto)
+.atl/
+
