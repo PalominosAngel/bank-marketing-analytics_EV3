@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Bank Marketing Analytics — Presentación</title>
+<style>
+  :root{
+    --navy:#0C2D48; --navy2:#14507A; --teal:#2DBFA8; --teal-dark:#16877A;
+    --ink:#1A2530; --muted:#5B6B7A; --bg:#FFFFFF; --soft:#F4F7FA; --line:#E2E8F0;
+    --amber:#E8A33D;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  @page{ size:13.333in 7.5in; margin:0; }
+  html,body{ font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .slide{
+    position:relative; width:13.333in; height:7.5in; padding:0.62in 0.78in 0.55in;
+    background:var(--bg); overflow:hidden; page-break-after:always; display:flex; flex-direction:column;
+  }
+  .slide:last-child{ page-break-after:auto; }
+  .kicker{ font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal-dark); font-weight:700; }
+  h1.title{ font-size:34px; color:var(--navy); line-height:1.12; margin-top:6px; font-weight:800; }
+  .accent{ width:62px; height:5px; background:var(--teal); border-radius:3px; margin:13px 0 18px; }
+  .footer{ position:absolute; left:0.78in; right:0.78in; bottom:0.34in; display:flex; justify-content:space-between;
+           font-size:11px; color:var(--muted); border-top:1px solid var(--line); padding-top:7px; }
+  .pagenum{ font-weight:700; color:var(--navy2); }
+  .body{ flex:1; display:flex; flex-direction:column; justify-content:center; }
+  ul.lead{ list-style:none; }
+  ul.lead li{ position:relative; padding-left:26px; margin-bottom:13px; font-size:18px; line-height:1.4; color:var(--ink); }
+  ul.lead li::before{ content:""; position:absolute; left:0; top:8px; width:10px; height:10px; background:var(--teal); border-radius:50%; }
+  ul.lead li b{ color:var(--navy); }
+  .muted{ color:var(--muted); }
+  .small{ font-size:14px; }
+
+  .cards{ display:flex; gap:16px; margin-top:6px; }
+  .card{ flex:1; background:var(--soft); border:1px solid var(--line); border-radius:12px; padding:18px 18px 16px; }
+  .card h3{ font-size:16px; color:var(--navy); margin-bottom:9px; display:flex; align-items:center; gap:8px; }
+  .card .tag{ font-size:10px; font-weight:700; color:#fff; background:var(--teal-dark); padding:2px 8px; border-radius:20px; letter-spacing:.04em;}
+  .card ul{ list-style:none; }
+  .card li{ font-size:13.5px; line-height:1.45; padding-left:15px; position:relative; margin-bottom:6px; color:var(--ink); }
+  .card li::before{ content:"–"; position:absolute; left:0; color:var(--teal-dark); font-weight:700; }
+
+  .metrics{ display:flex; gap:18px; margin:6px 0 4px; }
+  .metric{ flex:1; background:linear-gradient(160deg,var(--navy),var(--navy2)); color:#fff; border-radius:14px; padding:20px 16px; text-align:center; }
+  .metric .num{ font-size:38px; font-weight:800; line-height:1; color:#fff; }
+  .metric .lbl{ font-size:12.5px; margin-top:8px; opacity:.85; letter-spacing:.02em; }
+  .metric.alt{ background:linear-gradient(160deg,var(--teal-dark),var(--teal)); }
+
+  .arch{ display:flex; align-items:center; justify-content:center; gap:10px; margin-top:8px; flex-wrap:nowrap; }
+  .col{ display:flex; flex-direction:column; gap:9px; }
+  .node{ background:#fff; border:2px solid var(--navy2); color:var(--navy); border-radius:10px; padding:11px 13px; font-size:13px; font-weight:600; text-align:center; min-width:118px; }
+  .node.src{ border-color:var(--teal-dark); }
+  .node.proc{ background:var(--navy); color:#fff; border-color:var(--navy); }
+  .node.store{ background:var(--soft); }
+  .node.view{ border-color:var(--amber); }
+  .node small{ display:block; font-size:10.5px; font-weight:500; color:var(--muted); margin-top:3px; }
+  .node.proc small{ color:#cfe3ee; }
+  .arrow{ color:var(--teal-dark); font-size:24px; font-weight:800; }
+
+  table{ width:100%; border-collapse:collapse; margin-top:6px; font-size:14px; }
+  th,td{ text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); }
+  th{ background:var(--navy); color:#fff; font-size:12.5px; letter-spacing:.03em; }
+  td b{ color:var(--navy); }
+  tr:nth-child(even) td{ background:var(--soft); }
+  .ok{ color:var(--teal-dark); font-weight:700; }
+
+  .cover{ background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,var(--teal-dark) 130%); color:#fff; justify-content:center; }
+  .cover .kicker{ color:var(--teal); }
+  .cover h1{ font-size:52px; font-weight:800; line-height:1.08; margin:14px 0 10px; color:#fff; }
+  .cover .sub{ font-size:21px; opacity:.92; font-weight:300; }
+  .cover .meta{ margin-top:40px; font-size:15px; line-height:1.9; opacity:.92; }
+  .cover .meta b{ color:var(--teal); }
+  .cover .accent{ background:var(--teal); }
+  .pill{ display:inline-block; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:30px; padding:6px 16px; font-size:13px; margin-top:8px;}
+
+  .twocol{ display:flex; gap:26px; }
+  .twocol > div{ flex:1; }
+  .lead-sm li{ font-size:16px; margin-bottom:10px; }
+  .note{ background:#FFF8EC; border-left:4px solid var(--amber); padding:11px 15px; border-radius:6px; font-size:13.5px; color:#6b5326; margin-top:10px;}
+
+  /* Slide de gráficos reales */
+  .charts{ display:flex; gap:16px; align-items:stretch; }
+  .chart-card{ flex:1; background:var(--soft); border:1px solid var(--line); border-radius:12px; padding:13px 13px 11px; display:flex; flex-direction:column; }
+  .chart-label{ font-size:11.5px; font-weight:700; color:#fff; background:var(--teal-dark); align-self:flex-start; padding:3px 13px; border-radius:20px; margin-bottom:10px; letter-spacing:.05em; text-transform:uppercase; }
+  .chart-card img{ width:100%; height:2.85in; object-fit:contain; background:#fff; border-radius:8px; border:1px solid var(--line); padding:4px; }
+  .chart-cap{ font-size:12.5px; color:var(--ink); margin-top:10px; text-align:center; line-height:1.35; }
+  .chart-cap b{ color:var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- 1. PORTADA -->
+<section class="slide cover">
+  <div class="kicker">Programación para la Ciencia de Datos · SCY1101</div>
+  <h1>Bank Marketing Analytics</h1>
+  <div class="accent"></div>
+  <div class="sub">Solución end-to-end: pipeline ETL multifuente, API y dashboard diferenciado por audiencia</div>
+  <div class="pill">Evaluación Parcial N°3 · Defensa individual (15 min)</div>
+  <div class="meta">
+    <b>Equipo:</b> Benjamin Arratia · Angel Palominos · María José Álvarez<br>
+    <b>Repositorio:</b> github.com/PalominosAngel/bank-marketing-analytics_EV3<br>
+    <b>Stack:</b> Python 3.12 · pandas · scikit-learn · FastAPI · Streamlit · Plotly
+  </div>
+</section>
+
+<!-- 2. PROBLEMA Y OBJETIVO -->
+<section class="slide">
+  <div class="kicker">Contexto de negocio</div>
+  <h1 class="title">El problema: campañas que se deciden sin datos</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <ul class="lead">
+      <li>Un banco ejecuta campañas telefónicas para captar depósitos a plazo, pero <b>no sabe qué perfiles ni qué canales convierten</b>.</li>
+      <li><b>Objetivo:</b> transformar datos crudos de campañas en información accionable para tres audiencias distintas — <b>gerencia, analistas y personal operativo</b>.</li>
+      <li>Punto de partida real: <b>4.521 contactos</b> con solo <b>11,5% de conversión</b> → hay margen claro para focalizar el esfuerzo comercial.</li>
+    </ul>
+    <div class="note"><b>Valor:</b> pasar de “llamar a todos” a “llamar a quien más probabilidad de conversión tiene”, con evidencia y no por intuición.</div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">02</span></div>
+</section>
+
+<!-- 3. VISION GENERAL -->
+<section class="slide">
+  <div class="kicker">La solución</div>
+  <h1 class="title">Una plataforma end-to-end, no un script suelto</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3><span class="tag">1</span> Integración</h3><ul>
+        <li>3 fuentes heterogéneas</li><li>CSV + API REST + SQL</li><li>Validación de esquema</li></ul></div>
+      <div class="card"><h3><span class="tag">2</span> Procesamiento</h3><ul>
+        <li>Pipeline ETL robusto</li><li>Segmentación PCA + K-Means</li><li>Manejo avanzado de errores</li></ul></div>
+      <div class="card"><h3><span class="tag">3</span> Servicio</h3><ul>
+        <li>API REST (FastAPI)</li><li>Desacopla datos de UI</li><li>7 endpoints documentados</li></ul></div>
+      <div class="card"><h3><span class="tag">4</span> Consumo</h3><ul>
+        <li>Dashboard por audiencia</li><li>Ejecutiva / Operativa / Técnica</li><li>Ejecución local reproducible</li></ul></div>
+    </div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">03</span></div>
+</section>
+
+<!-- 4. ARQUITECTURA -->
+<section class="slide">
+  <div class="kicker">Arquitectura técnica</div>
+  <h1 class="title">Flujo de datos en capas desacopladas</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="arch">
+      <div class="col">
+        <div class="node src">bank.csv<small>Fuente 1 · CSV (4.521)</small></div>
+        <div class="node src">World Bank API<small>Fuente 2 · REST</small></div>
+        <div class="node src">Catálogo canales<small>Fuente 3 · SQL</small></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="col"><div class="node proc">Pipeline ETL<small>extract · transform<br>validate · load</small></div></div>
+      <div class="arrow">→</div>
+      <div class="col"><div class="node store">SQLite<small>resultados + etl_runs</small></div></div>
+      <div class="arrow">→</div>
+      <div class="col"><div class="node proc">API FastAPI<small>7 endpoints</small></div></div>
+      <div class="arrow">→</div>
+      <div class="col">
+        <div class="node view">Vista Ejecutiva</div>
+        <div class="node view">Vista Operativa</div>
+        <div class="node view">Vista Técnica</div>
+      </div>
+    </div>
+    <div class="note"><b>Decisión clave:</b> el dashboard nunca toca la base directamente — consume la API. Esto permite cambiar el almacenamiento o escalar sin tocar la visualización.</div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">04</span></div>
+</section>
+
+<!-- 5. PIPELINE ETL -->
+<section class="slide">
+  <div class="kicker">Pipeline ETL · Indicador clave</div>
+  <h1 class="title">Robustez: integra, valida y tolera fallos</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="twocol">
+      <div>
+        <ul class="lead lead-sm">
+          <li><b>3 fuentes reales</b> orquestadas: CSV, API REST del World Bank (Portugal, 2018–2024) y tabla SQL de referencia.</li>
+          <li><b>Validación de esquema:</b> columnas requeridas, tipos, dominios binarios, nulos y outliers.</li>
+          <li><b>Trazabilidad:</b> cada corrida se registra en <b>etl_runs</b> con estado y métricas de calidad.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card"><h3>Manejo avanzado de errores</h3><ul>
+          <li>Reintentos con <b>backoff exponencial</b> + timeout en la API externa</li>
+          <li><b>Fallback a caché</b> local si la red falla</li>
+          <li>Transacciones con <b>rollback</b> en la carga</li>
+          <li>Logging profesional con rotación de archivos</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">05</span></div>
+</section>
+
+<!-- 6. DECISIONES TECNICAS -->
+<section class="slide">
+  <div class="kicker">Justificación de diseño</div>
+  <h1 class="title">Decisiones técnicas y por qué</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <table>
+      <tr><th>Decisión</th><th>Alternativa</th><th>Por qué la elegimos</th></tr>
+      <tr><td><b>SQLite</b> (con soporte Postgres vía DATABASE_URL)</td><td>Postgres fijo</td><td>Baja fricción de instalación; portable sin perder la opción de escalar</td></tr>
+      <tr><td><b>FastAPI</b> intermedia</td><td>Dashboard lee la BD directo</td><td>Desacopla datos de visualización; valida y documenta (OpenAPI)</td></tr>
+      <tr><td><b>Caché</b> de la API externa</td><td>Llamada directa siempre</td><td>Tolerancia a fallos de red; demo estable y reproducible</td></tr>
+      <tr><td><b>PCA + K-Means</b> descriptivo</td><td>Modelo predictivo</td><td>Segmentación exploratoria honesta; no afirma causalidad</td></tr>
+      <tr><td><b>Ejecución local + .env</b></td><td>Infraestructura dedicada</td><td>Configuración externa y demo reproducible sin dependencias de infraestructura</td></tr>
+    </table>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">06</span></div>
+</section>
+
+<!-- 7. DASHBOARD EJECUTIVO -->
+<section class="slide">
+  <div class="kicker">Dashboard · Audiencia ejecutiva</div>
+  <h1 class="title">Para gerencia: el negocio en una mirada</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="metrics">
+      <div class="metric"><div class="num">4.521</div><div class="lbl">Clientes contactados</div></div>
+      <div class="metric alt"><div class="num">11,52%</div><div class="lbl">Tasa de conversión</div></div>
+      <div class="metric"><div class="num">521</div><div class="lbl">Conversiones</div></div>
+      <div class="metric alt"><div class="num">1.423</div><div class="lbl">Saldo promedio (€)</div></div>
+    </div>
+    <ul class="lead lead-sm" style="margin-top:18px">
+      <li>Lenguaje de <b>negocio</b>: conversión, perfiles con mejor respuesta, contexto macroeconómico.</li>
+      <li>Responde la pregunta del gerente: <b>¿en quién enfoco la próxima campaña?</b></li>
+    </ul>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">07</span></div>
+</section>
+
+<!-- 8. DASHBOARD OPERATIVO -->
+<section class="slide">
+  <div class="kicker">Dashboard · Audiencia operativa</div>
+  <h1 class="title">Para el equipo de campañas: accionable</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="twocol">
+      <div><ul class="lead lead-sm">
+        <li><b>Filtros interactivos</b> por ocupación, segmento y solo-conversiones.</li>
+        <li>Rendimiento <b>por canal de contacto</b> y duración de llamadas por resultado.</li>
+        <li><b>Descarga CSV</b> de la muestra filtrada para trabajar la lista de llamado.</li>
+      </ul></div>
+      <div><div class="card"><h3>Valor operativo</h3><ul>
+        <li>Pasa del “qué pasó” al <b>“a quién llamo hoy”</b></li>
+        <li>Prioriza canales y franjas más efectivas</li>
+        <li>Reduce esfuerzo en contactos de baja probabilidad</li>
+      </ul></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">08</span></div>
+</section>
+
+<!-- 9. DASHBOARD TECNICO -->
+<section class="slide">
+  <div class="kicker">Dashboard · Audiencia técnica</div>
+  <h1 class="title">Para analistas: trazabilidad y modelo</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>Calidad de datos</h3><ul><li>Métricas de validación</li><li>Nulos y outliers</li><li>Severidad por regla</li></ul></div>
+      <div class="card"><h3>Trazabilidad ETL</h3><ul><li>Historial de etl_runs</li><li>Estado y filas por corrida</li></ul></div>
+      <div class="card"><h3>Segmentación</h3><ul><li>Resumen K-Means</li><li>Dispersión PCA</li><li>Matriz de correlación</li></ul></div>
+    </div>
+    <div class="note"><b>Diferenciación real:</b> la misma data, tres lenguajes distintos. La vista técnica habla de PCA y correlación; la ejecutiva, de conversión y saldo.</div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">09</span></div>
+</section>
+
+<!-- 10. DEMO END-TO-END -->
+<section class="slide">
+  <div class="kicker">Demo en vivo</div>
+  <h1 class="title">El pipeline funcionando, de punta a punta</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <table>
+      <tr><th>Paso</th><th>Qué se muestra</th><th>Resultado real</th></tr>
+      <tr><td><b>1. ETL</b></td><td><code>python -m etl.pipeline</code> · 3 fuentes</td><td class="ok">4.521 filas · estado live_api</td></tr>
+      <tr><td><b>2. API</b></td><td><code>uvicorn api.main:app</code> · Swagger /docs</td><td class="ok">200 · conversión 11,52%</td></tr>
+      <tr><td><b>3. Dashboard</b></td><td><code>streamlit run</code> · 3 vistas por audiencia</td><td class="ok">render Plotly en vivo</td></tr>
+    </table>
+    <div class="note"><b>Plan B:</b> si la demo en vivo falla por red, las capturas y los KPIs reales respaldan que el flujo corre. Nunca depender solo de la conexión del laboratorio.</div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">10</span></div>
+</section>
+
+<!-- 11. GIT / COLABORACION -->
+<section class="slide">
+  <div class="kicker">Colaboración profesional</div>
+  <h1 class="title">Git como evidencia de trabajo en equipo</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="twocol">
+      <div><ul class="lead lead-sm">
+        <li>Flujo de ramas: <b>main → develop → feature/*</b>.</li>
+        <li><b>Issues</b> con responsables y criterios de aceptación.</li>
+        <li><b>Pull Requests</b> con revisión cruzada antes del merge.</li>
+        <li>Convención de commits <b>(feat/fix/docs/test)</b>.</li>
+      </ul></div>
+      <div><div class="card"><h3>Metodología</h3><ul>
+        <li>Reparto de responsabilidades por componente</li>
+        <li>Tablero de issues como gestión del trabajo</li>
+        <li>Revisión de pares = calidad y conocimiento compartido</li>
+        <li>main reservada para versiones estables</li>
+      </ul></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">11</span></div>
+</section>
+
+<!-- 12. GRAFICOS REALES DEL SISTEMA -->
+<section class="slide">
+  <div class="kicker">Visualizaciones del sistema</div>
+  <h1 class="title">Los gráficos reales, uno por audiencia</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="charts">
+      <div class="chart-card">
+        <div class="chart-label">Ejecutiva</div>
+        <img src="img/grafico_ejecutiva.png" alt="Conversión por ocupación">
+        <div class="chart-cap"><b>Conversión por ocupación.</b> Retired y student lideran → dónde enfocar la campaña.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Operativa</div>
+        <img src="img/grafico_operativa.png" alt="Rendimiento por canal">
+        <div class="chart-cap"><b>Rendimiento por canal.</b> El canal informado convierte 3× más que el no informado.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Técnica</div>
+        <img src="img/grafico_tecnica.png" alt="PCA y K-Means">
+        <div class="chart-cap"><b>Segmentación PCA + K-Means.</b> Cuatro segmentos de clientes proyectados en 2D.</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:14px">Capturas tomadas directamente del dashboard en ejecución — no son mockups.</div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">12</span></div>
+</section>
+
+<!-- 13. TESTING -->
+<section class="slide">
+  <div class="kicker">Calidad y automatización</div>
+  <h1 class="title">Testing automatizado</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="metrics">
+      <div class="metric"><div class="num">9 / 9</div><div class="lbl">Tests pasando</div></div>
+      <div class="metric alt"><div class="num">5</div><div class="lbl">Módulos cubiertos</div></div>
+      <div class="metric"><div class="num">7</div><div class="lbl">Endpoints API</div></div>
+    </div>
+    <ul class="lead lead-sm" style="margin-top:18px">
+      <li>Pruebas significativas: validación fail-fast, <b>fallback de red</b> de la API, generación de columnas de negocio y clustering.</li>
+      <li>Ejecución reproducible con <code>pytest</code>; evidencia guardada como informe de pruebas.</li>
+    </ul>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">13</span></div>
+</section>
+
+<!-- 14. LECCIONES -->
+<section class="slide">
+  <div class="kicker">Reflexión crítica</div>
+  <h1 class="title">Lecciones aprendidas y mejoras</h1>
+  <div class="accent"></div>
+  <div class="body">
+    <div class="twocol">
+      <div><div class="card"><h3>Qué funcionó</h3><ul>
+        <li>La <b>separación en capas</b> facilitó testing y cambios</li>
+        <li>El manejo de errores robusto evitó demos frágiles</li>
+        <li>El caché dio resiliencia ante fallos de red</li>
+      </ul></div></div>
+      <div><div class="card"><h3>Oportunidades de mejora</h3><ul>
+        <li>Optimizar el ETL para <b>grandes volúmenes</b> (chunking, batch)</li>
+        <li>Caché en el dashboard para mejor rendimiento</li>
+        <li>Autenticación en la API y scheduling del ETL</li>
+        <li>Monitoreo y despliegue en la nube</li>
+      </ul></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>Bank Marketing Analytics · SCY1101</span><span class="pagenum">14</span></div>
+</section>
+
+<!-- 15. CIERRE -->
+<section class="slide cover">
+  <div class="kicker">Gracias</div>
+  <h1>De datos crudos a decisiones</h1>
+  <div class="accent"></div>
+  <div class="sub">Pipeline ETL multifuente · API · dashboard por audiencia · testing · Git profesional</div>
+  <div class="meta">
+    <b>Repositorio:</b> github.com/PalominosAngel/bank-marketing-analytics_EV3<br>
+    <b>Demo local:</b> python -m etl.pipeline → uvicorn api.main:app → streamlit run dashboards/app.py<br>
+    <b>¿Preguntas?</b>
+  </div>
+</section>
+
+</body>
+</html>
