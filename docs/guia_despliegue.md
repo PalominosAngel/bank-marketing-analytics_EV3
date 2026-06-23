@@ -83,7 +83,7 @@ Abrir una tercera terminal:
 ```bash
 cd bank-marketing-analytics
 source .venv/bin/activate
-streamlit run dashboards/app.py
+PYTHONPATH=. streamlit run dashboards/app.py
 ```
 
 Dashboard disponible en:
