@@ -5,8 +5,8 @@
 | Pipeline ETL robusto | Tres fuentes, validación de esquema, logs, caché, reintentos, carga SQL local y exportaciones procesadas | `etl/`, `data/`, `logs/` |
 | Documentación completa | Arquitectura, API, manual de usuario, guía de ejecución local, decisiones técnicas y diagrama Mermaid | `README.md`, `docs/` |
 | Dashboard interactivo | Vistas ejecutiva, operativa y técnica con Plotly, filtros y terminología por audiencia | `dashboards/` |
-| Git profesional | Estrategia de ramas, issues planificados y checklist de evidencias para completar al final | `repo/` |
-| Ejecución reproducible local | Entorno virtual, `.env`, scripts de ejecución, SQLite local y guía paso a paso | `.env.example`, `scripts/`, `docs/guia_despliegue.md` |
+| Git profesional | Estrategia de ramas, issues planificados y checklist de evidencias para completar al final | `docs/colaboracion/` |
+| Ejecución reproducible local | Entorno virtual, `.env`, scripts de ejecución, SQLite local y guía paso a paso | `.env.example`, `scripts/`, `README.md` |
 | Presentación | Guion de 15 minutos, demo local y distribución de responsabilidades | `docs/presentacion.md` |
 
 ## Nota sobre Docker

@@ -6,7 +6,7 @@ El equipo decidi처 no utilizar Docker en esta versi처n del proyecto. La ejecuci�
 2. Archivo `.env` para configuraci처n externa.
 3. SQLite como base de datos local.
 4. Scripts de apoyo en `scripts/`.
-5. Documentaci처n paso a paso en `docs/guia_despliegue.md`.
+5. Documentaci처n paso a paso en la secci처n de instalaci처n del `README.md`.
 
 ## Justificaci처n
 

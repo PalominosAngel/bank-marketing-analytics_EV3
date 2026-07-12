@@ -1,27 +1,3 @@
-# Python
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.venv/
-venv/
-
-# Entorno
-.env
-
-# Datos generados
-logs/*.log
-data/processed/*.csv
-data/processed/*.json
-data/database/*.db
-
-# SO / IDE
-.DS_Store
-.vscode/
-.idea/
-
-# Evidencias locales de ejecución
-htmlcov/
-.coverage
 # Entorno virtual
 .venv/
 venv/
@@ -39,8 +15,10 @@ __pycache__/
 # Variables de entorno
 .env
 
-# Sistema operativo
+# Sistema operativo / IDE
 .DS_Store
+.vscode/
+.idea/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -58,9 +36,12 @@ logs/
 data/processed/
 data/database/
 
+# Evidencias locales de ejecución
+htmlcov/
+.coverage
+
 # Streamlit
 .streamlit/secrets.toml
 
 # Herramientas locales (no forman parte del proyecto)
 .atl/
-

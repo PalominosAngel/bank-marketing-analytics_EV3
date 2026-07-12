@@ -11,7 +11,7 @@ api:
 	uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 
 dashboard:
-	streamlit run dashboards/app.py --server.port 8501
+	PYTHONPATH=. streamlit run dashboards/app.py --server.port 8501
 
 test:
 	pytest
