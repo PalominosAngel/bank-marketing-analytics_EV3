@@ -1,0 +1,203 @@
+{
+  "generated_at": "2026-07-13T03:52:12.313840+00:00",
+  "target": "conversion_flag",
+  "feature_columns": [
+    "age",
+    "balance",
+    "day",
+    "campaign",
+    "pdays",
+    "previous",
+    "job",
+    "marital",
+    "education",
+    "default",
+    "housing",
+    "loan",
+    "contact",
+    "month",
+    "poutcome"
+  ],
+  "excluded_leakage_features": [
+    "duration",
+    "duration_minutes"
+  ],
+  "best_model": "logistic_regression",
+  "models": {
+    "logistic_regression": {
+      "best_params": {
+        "C": 0.1
+      },
+      "cv_best_roc_auc": 0.7121,
+      "test_roc_auc": 0.7348,
+      "test_accuracy": 0.7065,
+      "classification_report": {
+        "0": {
+          "precision": 0.9361147327249022,
+          "recall": 0.7172827172827173,
+          "f1-score": 0.8122171945701357,
+          "support": 1001.0
+        },
+        "1": {
+          "precision": 0.22252747252747251,
+          "recall": 0.6230769230769231,
+          "f1-score": 0.32793522267206476,
+          "support": 130.0
+        },
+        "accuracy": 0.7064544650751547,
+        "macro avg": {
+          "precision": 0.5793211026261873,
+          "recall": 0.6701798201798201,
+          "f1-score": 0.5700762086211002,
+          "support": 1131.0
+        },
+        "weighted avg": {
+          "precision": 0.8540932085642782,
+          "recall": 0.7064544650751547,
+          "f1-score": 0.7565526000990931,
+          "support": 1131.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          718,
+          283
+        ],
+        [
+          49,
+          81
+        ]
+      ],
+      "interpretability": [
+        {
+          "feature": "cat__poutcome_success",
+          "value": 1.2683
+        },
+        {
+          "feature": "cat__month_oct",
+          "value": 1.043
+        },
+        {
+          "feature": "cat__month_jan",
+          "value": -0.7815
+        },
+        {
+          "feature": "cat__month_mar",
+          "value": 0.6775
+        },
+        {
+          "feature": "cat__poutcome_failure",
+          "value": -0.6151
+        },
+        {
+          "feature": "cat__job_retired",
+          "value": 0.57
+        },
+        {
+          "feature": "cat__month_nov",
+          "value": -0.5231
+        },
+        {
+          "feature": "cat__poutcome_unknown",
+          "value": -0.4857
+        },
+        {
+          "feature": "cat__contact_unknown",
+          "value": -0.4769
+        },
+        {
+          "feature": "cat__month_may",
+          "value": -0.3923
+        }
+      ]
+    },
+    "random_forest": {
+      "best_params": {
+        "max_depth": null,
+        "n_estimators": 300
+      },
+      "cv_best_roc_auc": 0.7303,
+      "test_roc_auc": 0.7242,
+      "test_accuracy": 0.8877,
+      "classification_report": {
+        "0": {
+          "precision": 0.895117540687161,
+          "recall": 0.989010989010989,
+          "f1-score": 0.9397247271001424,
+          "support": 1001.0
+        },
+        "1": {
+          "precision": 0.56,
+          "recall": 0.1076923076923077,
+          "f1-score": 0.18064516129032257,
+          "support": 130.0
+        },
+        "accuracy": 0.887709991158267,
+        "macro avg": {
+          "precision": 0.7275587703435805,
+          "recall": 0.5483516483516484,
+          "f1-score": 0.5601849441952325,
+          "support": 1131.0
+        },
+        "weighted avg": {
+          "precision": 0.8565982831369127,
+          "recall": 0.887709991158267,
+          "f1-score": 0.8524742022944161,
+          "support": 1131.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          990,
+          11
+        ],
+        [
+          116,
+          14
+        ]
+      ],
+      "interpretability": [
+        {
+          "feature": "num__balance",
+          "value": 0.13
+        },
+        {
+          "feature": "num__age",
+          "value": 0.1228
+        },
+        {
+          "feature": "num__day",
+          "value": 0.111
+        },
+        {
+          "feature": "num__campaign",
+          "value": 0.0663
+        },
+        {
+          "feature": "num__pdays",
+          "value": 0.0373
+        },
+        {
+          "feature": "cat__poutcome_success",
+          "value": 0.0304
+        },
+        {
+          "feature": "num__previous",
+          "value": 0.0282
+        },
+        {
+          "feature": "cat__contact_unknown",
+          "value": 0.0219
+        },
+        {
+          "feature": "cat__marital_married",
+          "value": 0.0193
+        },
+        {
+          "feature": "cat__month_oct",
+          "value": 0.0182
+        }
+      ]
+    }
+  }
+}

@@ -28,11 +28,26 @@ class ApiExtractionResult:
     retrieved_at: str
 
 
-def extract_bank_csv(path: Path) -> pd.DataFrame:
-    """Lee el CSV principal y falla explícitamente si no existe o está vacío."""
+def extract_bank_csv(path: Path, chunksize: int | None = None, chunk_threshold_bytes: int = 5_000_000) -> pd.DataFrame:
+    """Lee el CSV principal y falla explícitamente si no existe o está vacío.
+
+    Para archivos que superan `chunk_threshold_bytes` (por defecto 5 MB), o cuando se
+    fuerza `chunksize` explícitamente, la lectura se hace por lotes con
+    `pd.read_csv(..., chunksize=...)` y se concatena al final. Esto evita cargar el
+    archivo completo en memoria de una sola vez a medida que el volumen de datos crece
+    más allá de bank.csv (4521 filas, ~350 KB), que hoy no lo necesita y por eso usa la
+    ruta directa.
+    """
     if not path.exists():
         raise FileNotFoundError(f"No se encontró el archivo CSV requerido: {path}")
-    df = pd.read_csv(path)
+
+    use_chunks = chunksize is not None or path.stat().st_size > chunk_threshold_bytes
+    if use_chunks:
+        reader = pd.read_csv(path, chunksize=chunksize or 1000)
+        df = pd.concat(list(reader), ignore_index=True)
+    else:
+        df = pd.read_csv(path)
+
     if df.empty:
         raise ValueError("El archivo bank.csv no contiene registros")
     return df

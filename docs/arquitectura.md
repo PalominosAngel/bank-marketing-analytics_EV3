@@ -19,10 +19,13 @@ flowchart LR
     CSV[bank.csv] --> ETL[Pipeline ETL]
     APIEXT[World Bank API] --> ETL
     SQLREF[(Catálogo SQL local)] --> ETL
-    ETL --> VAL[Validaciones + logs]
+    ETL --> VAL[Validaciones + limpieza + logs]
     VAL --> SEG[PCA + K-Means]
     SEG --> DB[(SQLite local)]
+    DB --> TRAIN[models.train: clasificación supervisada]
+    TRAIN --> METRICS[models/metrics.json]
     DB --> API[FastAPI]
+    METRICS --> API
     API --> DASH[Streamlit + Plotly]
 ```
 
@@ -33,6 +36,7 @@ flowchart LR
 - **FastAPI propia:** desacopla la visualización de la base de datos y ofrece documentación automática en `/docs`.
 - **Streamlit + Plotly:** permite construir un dashboard interactivo simple de ejecutar y consistente con los contenidos vistos en clases.
 - **Segmentación exploratoria:** PCA y K-Means permiten analizar perfiles de clientes sin presentar el resultado como una predicción causal.
+- **Clasificación supervisada separada del ETL:** `models/train.py` corre como un paso independiente después del pipeline (`python -m models.train`), no dentro de `etl/pipeline.py`, para no acoplar el entrenamiento (más lento, con tuning) a cada ejecución del ETL. Ver `docs/decisiones_tecnicas.md` para la justificación de algoritmos y métricas.
 
 ## Trazabilidad
 

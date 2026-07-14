@@ -10,7 +10,12 @@ from etl.database import DatabaseManager
 from etl.extract import extract_bank_csv, extract_channel_reference, extract_world_bank_indicators
 from etl.load import load_all
 from etl.logging_config import configure_logging
-from etl.transform import transform_customers, build_segment_summary
+from etl.transform import (
+    build_conversion_pivot,
+    build_job_marital_profile,
+    build_segment_summary,
+    transform_customers,
+)
 from etl.validators import validate_bank_schema, metrics_to_frame
 
 
@@ -50,19 +55,23 @@ def run_pipeline() -> dict:
         logger.info("Fuente API externa extraída con estado: %s", api_result.source_status)
 
         metrics = validate_bank_schema(raw_customers)
-        quality_report = metrics_to_frame(metrics, run_id)
-        customers = transform_customers(
+        customers, cleaning_metrics = transform_customers(
             raw_customers,
             channel_reference,
             Path("data/processed/clustering_metadata.json"),
         )
+        quality_report = metrics_to_frame(metrics + cleaning_metrics, run_id)
         segment_summary = build_segment_summary(customers)
+        job_marital_profile = build_job_marital_profile(customers)
+        conversion_pivot = build_conversion_pivot(customers)
         load_all(
             db,
             customers,
             api_result.data,
             quality_report,
             segment_summary,
+            job_marital_profile,
+            conversion_pivot,
             Path("data/processed"),
         )
 

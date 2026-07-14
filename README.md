@@ -47,6 +47,8 @@ bank.csv + World Bank REST API + catálogo SQL de canales
                          ↓
                     SQLite local
                          ↓
+      Clasificación supervisada (Logistic Regression + Random Forest)
+                         ↓
                     FastAPI propia
                          ↓
                 Streamlit + Plotly
@@ -71,10 +73,12 @@ bank-marketing-analytics/
 │   └── img/               # Capturas usadas en la presentación
 ├── etl/                   # Pipeline: extract, transform, clustering, load, validators
 │   └── notebooks/         # Exploración inicial en Jupyter
+├── models/                 # Clasificación supervisada: entrenamiento, métricas y modelos serializados
+│   └── artifacts/          # Modelos entrenados (.joblib) — regenerable, no se versiona
 ├── scripts/                # run_local.sh y run_tests.sh
 ├── tests/                  # Pruebas automatizadas (pytest)
 ├── .env.example            # Plantilla de configuración
-├── Makefile                # Atajos: install, etl, api, dashboard, test, clean
+├── Makefile                # Atajos: install, etl, train-models, api, dashboard, test, clean
 ├── requirements.txt
 └── README.md
 ```
@@ -115,9 +119,10 @@ bank-marketing-analytics/
 Si el sistema tiene `make` instalado (viene por defecto en macOS y en la mayoría de distribuciones Linux), esta es la vía más corta:
 
 ```bash
-make install   # crea .venv e instala dependencias
+make install       # crea .venv e instala dependencias
 cp .env.example .env
-make etl       # ejecuta el pipeline ETL
+make etl           # ejecuta el pipeline ETL
+make train-models  # entrena los modelos de clasificación supervisada
 ```
 
 Luego, en dos terminales distintas (dentro de la misma carpeta del proyecto, con `.venv` activado no es necesario porque `make` ya usa el intérprete del venv vía el target `install`):
@@ -327,6 +332,22 @@ Pipeline completado: 4521 filas cargadas
 
 Si aparece `cache_fallback`, significa que la API externa no respondió y el sistema usó el respaldo local. Esto no impide ejecutar la demostración.
 
+#### 8. Entrenar los modelos de clasificación supervisada
+
+Requiere haber corrido el pipeline ETL primero (paso 7), ya que lee `data/processed/customers_processed.csv`.
+
+```bash
+python -m models.train
+```
+
+Resultado esperado:
+
+```text
+Entrenamiento completado. Mejor modelo: logistic_regression (ROC AUC test: 0.73)
+```
+
+Esto genera `models/metrics.json` (comparación de modelos, métricas e interpretabilidad — se versiona) y `models/artifacts/*.joblib` (modelos serializados — regenerable, no se versiona). Ver `docs/decisiones_tecnicas.md` para la justificación de algoritmos y por qué se excluye `duration` de las features.
+
 ### Levantar la API
 
 Abrir una nueva terminal, entrar nuevamente a la carpeta del proyecto y activar el entorno virtual.
@@ -416,7 +437,7 @@ pytest
 Resultado esperado:
 
 ```text
-9 passed
+21 passed
 ```
 
 También se puede ejecutar:
@@ -433,8 +454,8 @@ También se puede ejecutar:
 | Vista     | Usuario principal  | Contenido                                                     |
 | --------- | ------------------ | --------------------------------------------------------------- |
 | Ejecutiva | Gerencia           | KPIs, conversión, perfiles prioritarios y contexto económico.   |
-| Operativa | Equipo de campañas | Filtros, rendimiento por canal y descarga de muestras.          |
-| Técnica   | Analistas          | Calidad de datos, ETL, PCA, K-Means y correlaciones.            |
+| Operativa | Equipo de campañas | Filtros, rendimiento por canal, perfil por ocupación/estado civil y descarga de muestras. |
+| Técnica   | Analistas          | Calidad de datos, ETL, PCA, K-Means, correlaciones y comparación de modelos de clasificación supervisada. |
 
 ---
 
@@ -446,6 +467,8 @@ El pipeline incluye:
 * Validación de columnas obligatorias.
 * Validación de dominios binarios.
 * Conteo de duplicados, nulos y categorías `unknown`.
+* Capado de outliers (IQR) en `balance` y `duration`, cuantificado en el reporte de calidad.
+* Lectura por chunks para archivos grandes (`etl/extract.py`).
 * Extracción desde API externa con reintentos limitados.
 * Caché de contingencia para demo sin conexión.
 * Fuente SQL local de referencia.
@@ -461,9 +484,10 @@ El pipeline incluye:
 Se recomienda guardar capturas de pantalla de:
 
 1. Ejecución exitosa del pipeline: `Pipeline completado: 4521 filas cargadas`
-2. API funcionando en: `http://localhost:8000/docs`
-3. Dashboard funcionando en: `http://localhost:8501`
-4. Pruebas automatizadas aprobadas: `9 passed`
+2. Entrenamiento de modelos: `Entrenamiento completado. Mejor modelo: ...`
+3. API funcionando en: `http://localhost:8000/docs`
+4. Dashboard funcionando en: `http://localhost:8501`
+5. Pruebas automatizadas aprobadas: `21 passed`
 
 Estas evidencias pueden utilizarse durante la presentación.
 

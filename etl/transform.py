@@ -4,6 +4,7 @@ from __future__ import annotations
 import pandas as pd
 
 from etl.clustering import add_customer_segments
+from etl.validators import QualityMetric
 
 
 MONTH_ORDER = {
@@ -11,8 +12,39 @@ MONTH_ORDER = {
     "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
 }
 
+OUTLIER_COLUMNS = ["balance", "duration"]
 
-def transform_customers(raw_df: pd.DataFrame, channel_reference: pd.DataFrame, metadata_path) -> pd.DataFrame:
+
+def cap_outliers_iqr(df: pd.DataFrame, columns: list[str], multiplier: float = 1.5) -> tuple[pd.DataFrame, list[QualityMetric]]:
+    """Capa (winsoriza) outliers vía rango intercuartílico en lugar de eliminarlos.
+
+    Segunda técnica de limpieza, distinta de "conservar categorías unknown": aquí el
+    valor extremo sí se ajusta, porque una fila con `balance` o `duration` fuera de
+    escala distorsiona por igual a K-Means/PCA (etl/clustering.py) y a los modelos
+    supervisados (models/classification.py) sin aportar señal adicional más allá de
+    "es un extremo". Se capa en vez de eliminar para no perder registros en un
+    dataset de solo 4521 filas.
+    """
+    result = df.copy()
+    metrics: list[QualityMetric] = []
+    for column in columns:
+        q1, q3 = result[column].quantile([0.25, 0.75])
+        iqr = q3 - q1
+        lower, upper = q1 - multiplier * iqr, q3 + multiplier * iqr
+        affected = int(((result[column] < lower) | (result[column] > upper)).sum())
+        result[column] = result[column].clip(lower=lower, upper=upper)
+        metrics.append(QualityMetric(
+            metric=f"{column}_outliers_capped",
+            value=affected,
+            severity="info",
+            description=f"Valores de '{column}' capados a [{lower:.1f}, {upper:.1f}] vía IQR (1.5x)",
+        ))
+    return result, metrics
+
+
+def transform_customers(
+    raw_df: pd.DataFrame, channel_reference: pd.DataFrame, metadata_path
+) -> tuple[pd.DataFrame, list[QualityMetric]]:
     """Limpia, enriquece y segmenta los registros de campañas bancarias."""
     df = raw_df.copy().drop_duplicates().reset_index(drop=True)
 
@@ -23,6 +55,8 @@ def transform_customers(raw_df: pd.DataFrame, channel_reference: pd.DataFrame, m
     text_columns = ["job", "marital", "education", "default", "housing", "loan", "contact", "month", "poutcome", "y"]
     for column in text_columns:
         df[column] = df[column].astype(str).str.strip().str.lower()
+
+    df, outlier_metrics = cap_outliers_iqr(df, OUTLIER_COLUMNS)
 
     df.insert(0, "customer_id", range(1, len(df) + 1))
     df["conversion_flag"] = (df["y"] == "yes").astype(int)
@@ -46,7 +80,8 @@ def transform_customers(raw_df: pd.DataFrame, channel_reference: pd.DataFrame, m
     if df["channel_label"].isna().any():
         raise ValueError("Existen canales de contacto sin correspondencia en la fuente SQL")
 
-    return add_customer_segments(df, metadata_path)
+    segmented = add_customer_segments(df, metadata_path)
+    return segmented, outlier_metrics
 
 
 def build_segment_summary(customers: pd.DataFrame) -> pd.DataFrame:
@@ -63,3 +98,37 @@ def build_segment_summary(customers: pd.DataFrame) -> pd.DataFrame:
         .assign(conversion_rate=lambda frame: (frame["conversion_rate"] * 100).round(2))
         .round({"average_age": 2, "average_balance": 2, "average_duration_minutes": 2, "average_campaign_contacts": 2})
     )
+
+
+def build_job_marital_profile(customers: pd.DataFrame) -> pd.DataFrame:
+    """Perfil por ocupación y estado civil: agrupación multi-clave con múltiples agregaciones."""
+    return (
+        customers.groupby(["job", "marital"], as_index=False)
+        .agg(
+            customers=("customer_id", "count"),
+            balance_mean=("balance", "mean"),
+            balance_median=("balance", "median"),
+            duration_minutes_mean=("duration_minutes", "mean"),
+            conversion_rate=("conversion_flag", "mean"),
+        )
+        .assign(conversion_rate=lambda frame: (frame["conversion_rate"] * 100).round(2))
+        .round({"balance_mean": 2, "balance_median": 2, "duration_minutes_mean": 2})
+        .sort_values(["job", "marital"])
+        .reset_index(drop=True)
+    )
+
+
+def build_conversion_pivot(customers: pd.DataFrame) -> pd.DataFrame:
+    """Tasa de conversión (%) por mes y grupo de canal, vía pivot_table (reshape ancho)."""
+    pivot = pd.pivot_table(
+        customers,
+        values="conversion_flag",
+        index="month",
+        columns="channel_group",
+        aggfunc="mean",
+        fill_value=0.0,
+    )
+    pivot = (pivot * 100).round(2)
+    pivot["month_number"] = pivot.index.map(MONTH_ORDER)
+    pivot = pivot.sort_values("month_number").drop(columns="month_number")
+    return pivot.reset_index().rename_axis(columns=None)

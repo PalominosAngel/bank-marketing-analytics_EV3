@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import requests
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -44,3 +45,48 @@ def render() -> None:
     st.plotly_chart(fig_corr, use_container_width=True)
 
     st.info("La segmentación es exploratoria. Su objetivo es apoyar el análisis descriptivo, no reemplazar el criterio comercial ni predecir causalidad.")
+
+    st.subheader("Clasificación supervisada: ¿el cliente contratará el depósito?")
+    try:
+        metrics = get_json("/models/metrics")
+    except requests.HTTPError:
+        st.warning("Aún no se entrenaron modelos supervisados. Ejecuta: `python -m models.train`")
+    else:
+        model_names = list(metrics["models"].keys())
+        comparison = pd.DataFrame([
+            {
+                "modelo": name,
+                "roc_auc_test": metrics["models"][name]["test_roc_auc"],
+                "roc_auc_cv": metrics["models"][name]["cv_best_roc_auc"],
+                "accuracy_test": metrics["models"][name]["test_accuracy"],
+            }
+            for name in model_names
+        ])
+        st.caption(
+            f"Mejor modelo: **{metrics['best_model']}**. "
+            f"Excluye deliberadamente `duration` de las features (fuga de información: "
+            f"solo se conoce después de realizar la llamada)."
+        )
+        fig_models = px.bar(
+            comparison, x="modelo", y="roc_auc_test", text="roc_auc_test",
+            title="Comparación de modelos supervisados (ROC AUC en test)",
+            labels={"modelo": "Modelo", "roc_auc_test": "ROC AUC (test)"},
+        )
+        fig_models.update_traces(texttemplate="%{text:.3f}", textposition="outside")
+        fig_models.update_layout(plot_bgcolor="white", paper_bgcolor="white", yaxis_range=[0, 1])
+        st.plotly_chart(fig_models, use_container_width=True)
+
+        best_name = metrics["best_model"]
+        importance = pd.DataFrame(metrics["models"][best_name]["interpretability"])
+        fig_importance = px.bar(
+            importance.sort_values("value"), x="value", y="feature", orientation="h",
+            title=f"Variables más influyentes — {best_name}",
+            labels={"value": "Importancia / coeficiente", "feature": "Variable"},
+        )
+        fig_importance.update_layout(plot_bgcolor="white", paper_bgcolor="white")
+        st.plotly_chart(fig_importance, use_container_width=True)
+
+        st.caption(
+            f"Reporte de clasificación completo y matriz de confusión disponibles en "
+            f"`GET /models/metrics` (modelo: {best_name})."
+        )

@@ -13,6 +13,8 @@ def load_all(
     macroeconomic: pd.DataFrame,
     quality_report: pd.DataFrame,
     segment_summary: pd.DataFrame,
+    job_marital_profile: pd.DataFrame,
+    conversion_pivot: pd.DataFrame,
     processed_dir: Path,
 ) -> None:
     """Persiste tablas y exporta CSV procesados para auditoría."""
@@ -21,8 +23,12 @@ def load_all(
     db.replace_table(macroeconomic, "macroeconomic_indicators")
     db.replace_table(quality_report, "data_quality_report")
     db.replace_table(segment_summary, "segment_summary")
+    db.replace_table(job_marital_profile, "job_marital_profile")
+    db.replace_table(conversion_pivot, "conversion_pivot_by_month_channel")
 
     customers.to_csv(processed_dir / "customers_processed.csv", index=False)
     macroeconomic.to_csv(processed_dir / "macroeconomic_indicators.csv", index=False)
     quality_report.to_csv(processed_dir / "data_quality_report.csv", index=False)
     segment_summary.to_csv(processed_dir / "segment_summary.csv", index=False)
+    job_marital_profile.to_csv(processed_dir / "job_marital_profile.csv", index=False)
+    conversion_pivot.to_csv(processed_dir / "conversion_pivot_by_month_channel.csv", index=False)

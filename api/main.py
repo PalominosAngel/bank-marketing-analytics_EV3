@@ -1,12 +1,17 @@
 """API REST propia para exponer resultados del pipeline."""
 from __future__ import annotations
 
+from pathlib import Path
+import json
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 from api.database import db
 from api.schemas import HealthResponse
+
+MODEL_METRICS_PATH = Path("models/metrics.json")
 
 app = FastAPI(
     title="Bank Marketing Analytics API",
@@ -90,3 +95,23 @@ def get_data_quality() -> list[dict]:
 @app.get("/api/etl-runs")
 def get_etl_runs() -> list[dict]:
     return records(safe_query("SELECT * FROM etl_runs ORDER BY started_at DESC LIMIT 20"))
+
+
+@app.get("/api/profile/job-marital")
+def get_job_marital_profile() -> list[dict]:
+    return records(safe_query("SELECT * FROM job_marital_profile ORDER BY job, marital"))
+
+
+@app.get("/api/conversion-pivot")
+def get_conversion_pivot() -> list[dict]:
+    return records(safe_query("SELECT * FROM conversion_pivot_by_month_channel"))
+
+
+@app.get("/models/metrics")
+def get_model_metrics() -> dict:
+    if not MODEL_METRICS_PATH.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Aún no se entrenaron modelos. Ejecuta primero: python -m models.train",
+        )
+    return json.loads(MODEL_METRICS_PATH.read_text(encoding="utf-8"))

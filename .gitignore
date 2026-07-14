@@ -35,6 +35,7 @@ logs/
 # Archivos procesados regenerables
 data/processed/
 data/database/
+models/artifacts/
 
 # Evidencias locales de ejecución
 htmlcov/

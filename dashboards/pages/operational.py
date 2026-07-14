@@ -52,6 +52,14 @@ def render() -> None:
     fig_duration.update_layout(plot_bgcolor="white", paper_bgcolor="white")
     st.plotly_chart(fig_duration, use_container_width=True)
 
+    st.subheader("Conversión por mes y canal")
+    pivot = pd.DataFrame(get_json("/api/conversion-pivot"))
+    st.dataframe(pivot, use_container_width=True)
+
+    st.subheader("Perfil por ocupación y estado civil")
+    profile = pd.DataFrame(get_json("/api/profile/job-marital"))
+    st.dataframe(profile, use_container_width=True, height=300)
+
     st.subheader("Muestra descargable")
     visible_columns = [
         "customer_id", "age", "job", "education", "balance", "housing", "loan",
